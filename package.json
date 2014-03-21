@@ -1,0 +1,15 @@
+{
+  "name": "fish_game",
+  "version": "1.0.0",
+  "main": "bfef.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bfef.js"
+  },
+  "dependencies": {
+    "socket.io": "0.9.6",
+    "connect": "1.9.2"
+  },
+  "author": "Ray Harris",
+  "license": "MIT"
+}

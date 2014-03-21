@@ -1,6 +1,73 @@
+/////////////////////chat stuff/////////////////////////
+jQuery(document).ready(function () {
+	var log_chat_message = function  (message, type) 
+
+	{
+		var li = jQuery('<li />').text(message);
+		
+		if (type === 'system') {
+			li.css({'font-weight': 'bold'});
+		} else if (type === 'leave' || type === 'error') {
+			li.css({'font-weight': 'bold', 'color': '#F00'});
+		}
+			
+		jQuery('#chat_log').append(li);
+	};
+
+
+	var socket = io.connect('http://localhost:3000');
+
+	socket.on('entrance', function  (data) {
+		log_chat_message(data.message, 'system');
+	});
+
+	socket.on('exit', function  (data) {
+		log_chat_message(data.message, 'leave');
+	});
+
+	socket.on('chat', function  (data) {
+		log_chat_message(data.message, 'normal');
+	});
+
+	socket.on('error', function  (data) {
+		log_chat_message(data.message, 'error');
+	});
+
+	jQuery('#chat_box').keypress(function (event) {
+		if (event.which == 13) {
+			socket.emit('chat', {message: jQuery('#chat_box').val()});
+			jQuery('#chat_box').val('');
+		}
+	});
+
+////////////////Sending a message to server from canvas///////////////////
+// it works! send special with 'W' while canvas in focus
+
+	jQuery('#gamecanvas').keypress(function (event) {
+		if (event.which == 119) {
+			socket.emit('pmove', {message: jQuery('#chat_box').val()});
+		}
+	});
+
+
+});
+
+/*
+jQuery(document).ready(function () {
+	var log_chat_message = function  (message, type) 
+*/
+
+
+
+
+///////////////////Custom stuff//////////////////////////
+
+//////////////////GAME STUFF/////////////////////////////
 // Construct the canvas
 var canvas = document.getElementById("gamecanvas"),
 	ctx = canvas.getContext("2d");
+
+    canvas.setAttribute('tabindex', 1);
 
 	canvas.width = 512;
 	canvas.height = 480;
@@ -101,6 +168,9 @@ var reset = function () {
 // now for the actually cool stuff. the game logic
 
 var update = function (modifier) {
+
+	//var socket = io.connect('http://localhost:3000');
+
 	if (38 in keysDown) { //38 is the up key
 		player.y -= player.speed * modifier, ctx.clearRect(0,0,512,480);
 	}
@@ -112,6 +182,8 @@ var update = function (modifier) {
 	}
 	if (39 in keysDown) { //38 is the up key
 		player.x += player.speed * modifier, ctx.clearRect(0,0,512,480);
+//	if (115 in keysDown) { //115 is the s key
+//		socket.emit('pmove', {message: jQuery('#chat_box').val()});
 	}
 
 // now we check collision of the player and the brick

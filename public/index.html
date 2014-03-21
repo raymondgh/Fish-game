@@ -1,0 +1,43 @@
+<html>
+<head>
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script src="jquery-1.7.2.min.js"></script>
+
+<style type="text/css" media="screen">
+	div#chatroom {
+		display: block;
+		height: 300px;
+		border: 1px solid #999;
+		overflow: auto;
+		width: 100%;
+		margin-bottom: 10px;
+		position: relative;
+	}
+
+	ul#chat_log {
+		list-style: none;
+		position: absolute;
+		bottom: 0px;
+	}
+
+	input#chat_box {
+		width: 99%;
+	}
+	canvas#gamecanvas {
+    	outline: none;
+    }
+
+</style>
+</head>
+<body id="mainbody">
+
+	<div id="chatroom">
+		<ul id="chat_log">
+		</ul>
+	</div>
+
+	<input type="text" name="chat_box" value="" id="chat_box" placeholder="type to chat..." />
+	<canvas id="gamecanvas"></canvas>
+<script src="local.js"></script>
+</body>
+</html>
