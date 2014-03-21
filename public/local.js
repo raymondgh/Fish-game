@@ -1,7 +1,6 @@
 /////////////////////chat stuff/////////////////////////
 jQuery(document).ready(function () {
 	var log_chat_message = function  (message, type) 
-
 	{
 		var li = jQuery('<li />').text(message);
 		
@@ -13,7 +12,6 @@ jQuery(document).ready(function () {
 			
 		jQuery('#chat_log').append(li);
 	};
-
 
 	var socket = io.connect('http://localhost:3000');
 
@@ -39,30 +37,15 @@ jQuery(document).ready(function () {
 			jQuery('#chat_box').val('');
 		}
 	});
-
 ////////////////Sending a message to server from canvas///////////////////
 // it works! send special with 'W' while canvas in focus
-
 	jQuery('#gamecanvas').keypress(function (event) {
 		if (event.which == 119) {
 			socket.emit('pmove', {message: jQuery('#chat_box').val()});
 		}
 	});
-
-
 });
 
-/*
-jQuery(document).ready(function () {
-	var log_chat_message = function  (message, type) 
-*/
-
-
-
-
-///////////////////Custom stuff//////////////////////////
-
-//////////////////GAME STUFF/////////////////////////////
 // Construct the canvas
 var canvas = document.getElementById("gamecanvas"),
 	ctx = canvas.getContext("2d");
@@ -92,12 +75,7 @@ var canvas = document.getElementById("gamecanvas"),
 	ctx.fillStyle="red";
 	ctx.fill();
 
-// background image
-// this is to preload images. which is apparently a pain in the ass
-// really don't understand it yet
-// seems necessary to load before rendering which for some reason requires preloading... tf
-
-
+// preload images
 // player
 var playerReady = false
 var playerImage = new Image();
@@ -114,7 +92,6 @@ brickImage.onload = function () {
 };
 brickImage.src = "images/brick.png";
 
-
 // Okay now for the good part. Game objects!
 
 var player = {
@@ -128,20 +105,9 @@ var bricks = {
 	y: 0,
 };
 
-var bricksCaught= 0; // amount of bricks caught so far
-
-
-// more cool stuff - CHAOS CONTROL... err KEYBOARD control
-
 var keysDown = {};
 
-// keydown is string representing event type to listen for
-// https://developer.mozilla.org/en-US/docs/Web/Reference/Events
-// keydown is for "a key is pressed down"... good enough for me
-// then the keycode for the key pressed is added to the keysDown array with value true
-// the final parameter, set false, differentiates real key presses from artificial in firefox
-// it does nothing in chrome gdi
-
+// key listening
 
 addEventListener("keydown", function (e) {
 	keysDown[e.keyCode] = true;
@@ -151,8 +117,7 @@ addEventListener("keyup", function (e) {
 	delete keysDown[e.keyCode];
 }, false);
 
-// okay now this part is supposed to reset the game when you catch the bricks
-// i hate defining functions as objects
+// reset on brick capture
 
 var reset = function () {
 	player.x = canvas.width / 2;
@@ -163,32 +128,24 @@ var reset = function () {
 	bricks.y = 16 + (Math.random() * (canvas.height - 32));
 };
 
-
-
 // now for the actually cool stuff. the game logic
 
 var update = function (modifier) {
 
-	//var socket = io.connect('http://localhost:3000');
-
 	if (38 in keysDown) { //38 is the up key
 		player.y -= player.speed * modifier, ctx.clearRect(0,0,512,480);
 	}
-	if (40 in keysDown) { //38 is the up key
+	if (40 in keysDown) { //40 is the down key
 		player.y += player.speed * modifier, ctx.clearRect(0,0,512,480);
 	}
-	if (37 in keysDown) { //38 is the up key
+	if (37 in keysDown) { //37 is the left key
 		player.x -= player.speed * modifier, ctx.clearRect(0,0,512,480);
 	}
-	if (39 in keysDown) { //38 is the up key
+	if (39 in keysDown) { //39 is the right key
 		player.x += player.speed * modifier, ctx.clearRect(0,0,512,480);
-//	if (115 in keysDown) { //115 is the s key
-//		socket.emit('pmove', {message: jQuery('#chat_box').val()});
 	}
 
-// now we check collision of the player and the brick
-// positions are in the top left corner of images, so this method
-// checks if 
+// collishion checking (images are 16x16pixels)
 
 	if (
 		player.x <= (bricks.x + 12) 
@@ -202,8 +159,7 @@ var update = function (modifier) {
 	}
 };
 
-
-// good good. now to render things
+// render
 
 var render = function () {
 
