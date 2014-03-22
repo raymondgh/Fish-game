@@ -48,13 +48,3 @@ var failure = function  (socket) {
 
 set_sockets(fish_game.sockets);
 
-
-////////////custom game stuff///////////////
-/*
-var player_movement = function (config) {
-
-	  config.socket.on('pmove', function  (data) {
-    all_sockets.emit('chat', {message: "WPRESSER" + ' says: ' + data.message});
-  });
-}
-*/
